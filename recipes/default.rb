@@ -20,7 +20,13 @@
 include_recipe "git"
 include_recipe "zsh"
 
-search( :users, "shell:*zsh" ).each do |u|
+if Chef::Config[:solo]
+  users = node[:oh-my-zsh][:users]
+else
+  users = search(:users, "shell:*zsh")
+end
+
+users.each do |u|
   user_id = u["id"]
 
   git "/home/#{user_id}/.oh-my-zsh" do
@@ -32,7 +38,11 @@ search( :users, "shell:*zsh" ).each do |u|
     not_if "test -d /home/#{user_id}/.oh-my-zsh"
   end
 
-  theme = data_bag_item( "users", user_id )["oh-my-zsh-theme"]
+  if Chef::Config[:solo]
+    theme = u["theme"]
+  else
+    theme = data_bag_item( "users", user_id )["oh-my-zsh-theme"]
+  end
 
   template "/home/#{user_id}/.zshrc" do
     source "zshrc.erb"
