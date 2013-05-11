@@ -21,7 +21,7 @@ include_recipe "git"
 include_recipe "zsh"
 
 if Chef::Config[:solo]
-  users = node[:oh-my-zsh][:users]
+  users = node[:ohmyzsh][:users]
 else
   users = search(:users, "shell:*zsh")
 end

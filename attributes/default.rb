@@ -1,1 +1,1 @@
-default[:oh-my-zsh][:users] = []
+default[:ohmyzsh][:users] = []
